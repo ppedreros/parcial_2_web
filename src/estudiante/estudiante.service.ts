@@ -40,54 +40,39 @@ export class EstudianteService {
        return await this.estudianteRepository.save(estudiante);
    }
    
-   async inscribirseActividad(estudianteID: number, actividadID: number): Promise<Estudiante> {
-       const estudiante: Estudiante = await this.estudianteRepository.findOne({
+   async inscribirseActividad(estudianteID: number, actividadID: number): Promise<EstudianteEntity> {
+       const estudiante = await this.estudianteRepository.findOne({
            where: { id: estudianteID },
            relations: ["actividades"]
        });
        
        if (!estudiante)
-         throw new BusinessLogicException("El estudiante con el ID proporcionado no fue encontrado", BusinessError.NOT_FOUND);
+        throw new BusinessLogicException("El estudiante con el ID proporcionado no fue encontrado", BusinessError.NOT_FOUND);
        
-       const actividad: Actividad = await this.actividadRepository.findOne({
+       const actividad = await this.actividadRepository.findOne({
            where: { id: actividadID },
            relations: ["inscritos"]
        });
-       
-       if (!actividad)
-         throw new BusinessLogicException("La actividad con el ID proporcionado no fue encontrada", BusinessError.NOT_FOUND);
-       
-       // Verificar que la actividad está en estado 0 (disponible)
-       if (actividad.estado !== 0) {
-           throw new BusinessLogicException("La actividad no está disponible para inscripción", BusinessError.PRECONDITION_FAILED);
+
+       if (!actividad) {
+           throw new BusinessLogicException("La actividad con el ID proporcionado no fue encontrada", BusinessError.NOT_FOUND);
        }
        
-       // Verificar que haya cupo disponible
+       if (actividad.estado !== 0) {
+           throw new BusinessLogicException("La actividad no está en estado 0 para inscripción", BusinessError.PRECONDITION_FAILED);
+       }
+       
        if (actividad.inscritos && actividad.inscritos.length >= actividad.cupoMaximo) {
            throw new BusinessLogicException("La actividad no tiene cupos disponibles", BusinessError.PRECONDITION_FAILED);
        }
-       
-       // Verificar que el estudiante no esté ya inscrito
-       const estudianteYaInscrito = estudiante.actividades && 
-                                  estudiante.actividades.some(act => act.id === actividadID);
-       
-       if (estudianteYaInscrito) {
+              
+       if (estudiante.actividades && 
+        estudiante.actividades.some(act => act.id === actividadID)) {
            throw new BusinessLogicException("El estudiante ya está inscrito en esta actividad", BusinessError.PRECONDITION_FAILED);
        }
        
-       // Inicializar arrays si no existen
-       if (!estudiante.actividades) {
-           estudiante.actividades = [];
-       }
-       
-       if (!actividad.inscritos) {
-           actividad.inscritos = [];
-       }
-       
-       // Agregar la actividad al estudiante
        estudiante.actividades.push(actividad);
        
-       // Guardar los cambios
        return await this.estudianteRepository.save(estudiante);
    }
 }
