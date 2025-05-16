@@ -1,9 +1,9 @@
-import { Actividad } from 'src/actividad/actividad.entity';
-import { Estudiante } from 'src/estudiante/estudiante.entity';
+import { ActividadEntity } from 'src/actividad/actividad.entity';
+import { EstudianteEntity } from 'src/estudiante/estudiante.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class Resena {
+export class ResenaEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
@@ -16,9 +16,9 @@ export class Resena {
   @Column()
   fecha: string;
 
-  @ManyToOne(() => Estudiante, estudiante => estudiante.resenas)
-  estudiante: Estudiante;
+  @ManyToOne(() => EstudianteEntity, estudiante => estudiante.resenas)
+  estudiante: EstudianteEntity;
 
-  @ManyToOne(() => Actividad, actividad => actividad.resenas)
-  actividad: Actividad;
+  @ManyToOne(() => ActividadEntity, actividad => actividad.resenas)
+  actividad: ActividadEntity;
 }
