@@ -1,0 +1,639 @@
+{
+	"info": {
+		"_postman_id": "15c8bc72-deb9-4208-89cb-83bff91860ea",
+		"name": "Estudiantes",
+		"description": "Colección de métodos para la entidad de estudiante. Se hicieron pruebas para agregar estudiante, buscar por id un estudiante existente, buscar un id de estudiante inexistente para documentar cómo se comporta la API en el caso negativo. También se crea una actividad para luego mostrar cómo se inscribe un estudiante a una actividad. Por último, se trata de inscribir un estudiante a una actividad que no tiene cupos para mostrar cómo reacciona la API, para esto último la actividad creada debe tener solo un cupo para que se llenen los cupos durante la prueba. En los ejemplos de petición se pueden ver todos los posibles errores al hacer peticiones.\n\nLa base de datos debe estar vacía para correr la prueba, por lo que se debe reiniciar la API primero.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36519843"
+	},
+	"item": [
+		{
+			"name": "Add a student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()\r",
+							"pm.globals.set(\"estudianteId\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"cedula\": 1,\r\n   \"nombre\": \"Pablo\",\r\n   \"correo\": \"p.pedreros@uniandes.edu.co\",\r\n   \"programa\": \"Ingenieria de sistemas y computacion\",\r\n   \"semestre\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/estudiantes",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"estudiantes"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Add a student",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"cedula\": 1,\r\n   \"nombre\": \"Pablo\",\r\n   \"correo\": \"p.pedreros@uniandes.edu.co\",\r\n   \"programa\": \"Ingenieria de sistemas y computacion\",\r\n   \"semestre\": 8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/estudiantes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"estudiantes"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date"
+						}
+					],
+					"body": "{\n    \"id\": 1,\n    \"cedula\": 1,\n    \"nombre\": \"Pablo\",\n    \"correo\": \"p.pedreros@uniandes.edu.co\",\n    \"programa\": \"Ingenieria de sistemas y computacion\",\n    \"semestre\": 8\n}"
+				},
+				{
+					"name": "Add a with wrong semester",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"cedula\": 1,\r\n   \"nombre\": \"Pablo\",\r\n   \"correo\": \"p.pedreros@uniandes.edu.co\",\r\n   \"programa\": \"Ingenieria de sistemas y computacion\",\r\n   \"semestre\": 11\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/estudiantes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"estudiantes"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"statusCode\": 400,\r\n    \"message\": \"El semestre debe estar entre 1 y 10\"\r\n}"
+				},
+				{
+					"name": "Add a with wrong parameters Copy",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \"cedula\": 1,\r\n   \"nombre\": \"Pablo\",\r\n   \"correo\": \"p.pedrerosuniandes.edu.co\",\r\n   \"programa\": \"Ingenieria de sistemas y computacion\",\r\n   \"semestre\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/estudiantes",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"estudiantes"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"message\": [\r\n        \"correo must be an email\"\r\n    ],\r\n    \"error\": \"Bad Request\",\r\n    \"statusCode\": 400\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Find a student by Id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseURL}}/estudiantes/{{estudianteId}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"estudiantes",
+						"{{estudianteId}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Find a student by Id",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/estudiantes/{{estudianteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"estudiantes",
+								"{{estudianteId}}"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date"
+						}
+					],
+					"body": "{\n    \"id\": 1,\n    \"cedula\": 1,\n    \"nombre\": \"Pablo\",\n    \"correo\": \"p.pedreros@uniandes.edu.co\",\n    \"programa\": \"Ingenieria de sistemas y computacion\",\n    \"semestre\": 8,\n    \"actividades\": [],\n    \"resenas\": []\n}"
+				}
+			]
+		},
+		{
+			"name": "Find a student with an id that doesn't exist",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"   pm.response.to.have.status(404);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   var data = pm.response.json();\r",
+							"   pm.expect(data.message).to.eql(\"El estudiante con el Id proporcionado no fue encontrado\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/estudiantes/0",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"estudiantes",
+						"0"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Find a student with an id that doesn't exist",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/estudiantes/0",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"estudiantes",
+								"0"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [
+						{
+							"expires": "Invalid Date"
+						}
+					],
+					"body": "{\n    \"statusCode\": 404,\n    \"message\": \"El estudiante con el Id proporcionado no fue encontrado\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Create activity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()\r",
+							"pm.globals.set(\"actividadId\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"titulo\": \"Taller de Fotografía Artística Avanzada\",\r\n  \"fecha\": \"2025-06-15\",\r\n  \"cupoMaximo\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/actividades",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"actividades"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign student in an activity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseURL}}/estudiantes/{{estudianteId}}/{{actividadId}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"estudiantes",
+						"{{estudianteId}}",
+						"{{actividadId}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Sign student in an activity",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/estudiantes/{{estudianteId}}/{{actividadId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"estudiantes",
+								"{{estudianteId}}",
+								"{{actividadId}}"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"cedula\": 1,\n    \"nombre\": \"Pablo\",\n    \"correo\": \"p.pedreros@uniandes.edu.co\",\n    \"programa\": \"Ingenieria de sistemas y computacion\",\n    \"semestre\": 10,\n    \"actividades\": [\n        {\n            \"id\": 1,\n            \"titulo\": \"Taller de Fotografía Artística Avanzada\",\n            \"fecha\": \"2025-06-15\",\n            \"cupoMaximo\": 2,\n            \"estado\": 0,\n            \"inscritos\": []\n        }\n    ]\n}"
+				},
+				{
+					"name": "Sign student in an activity that is already",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/estudiantes/{{estudianteId}}/{{actividadId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"estudiantes",
+								"{{estudianteId}}",
+								"{{actividadId}}"
+							]
+						}
+					},
+					"status": "Precondition Failed",
+					"code": 412,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 412,\n    \"message\": \"El estudiante ya está inscrito en esta actividad\"\n}"
+				},
+				{
+					"name": "Sign student in an activity that doesn't exist",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/estudiantes/{{estudianteId}}/0",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"estudiantes",
+								"{{estudianteId}}",
+								"0"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"statusCode\": 404,\r\n    \"message\": \"La actividad con el ID proporcionado no fue encontrada\"\r\n}"
+				},
+				{
+					"name": "Sign non existent student  in an activity",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/estudiantes/0/{{actividadId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"estudiantes",
+								"0",
+								"{{actividadId}}"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"statusCode\": 404,\r\n    \"message\": \"El estudiante con el ID proporcionado no fue encontrado\"\r\n}"
+				}
+			]
+		},
+		{
+			"name": "Sign student in an activity with no spots",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 412\", function () {\r",
+							"   pm.response.to.have.status(412);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Get expected error message\", function () {\r",
+							"   var data = pm.response.json();\r",
+							"   pm.expect(data.message).to.eql(\"La actividad no tiene cupos disponibles\");\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseURL}}/estudiantes/{{estudianteId}}/{{actividadId}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"estudiantes",
+						"{{estudianteId}}",
+						"{{actividadId}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Sign student in an activity with no spots",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseURL}}/estudiantes/{{estudianteId}}/{{actividadId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"estudiantes",
+								"{{estudianteId}}",
+								"{{actividadId}}"
+							]
+						}
+					},
+					"status": "Precondition Failed",
+					"code": 412,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 412,\n    \"message\": \"La actividad no tiene cupos disponibles\"\n}"
+				}
+			]
+		}
+	]
+}

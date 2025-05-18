@@ -46,8 +46,9 @@ export class EstudianteService {
            relations: ["actividades"]
        });
        
-       if (!estudiante)
+       if (!estudiante){
         throw new BusinessLogicException("El estudiante con el ID proporcionado no fue encontrado", BusinessError.NOT_FOUND);
+       }
        
        const actividad = await this.actividadRepository.findOne({
            where: { id: actividadID },
@@ -67,7 +68,7 @@ export class EstudianteService {
        }
               
        if (estudiante.actividades && 
-        estudiante.actividades.some(act => act.id === actividadID)) {
+        estudiante.actividades.some(act => Number(act.id) === Number(actividadID))) {
            throw new BusinessLogicException("El estudiante ya está inscrito en esta actividad", BusinessError.PRECONDITION_FAILED);
        }
        

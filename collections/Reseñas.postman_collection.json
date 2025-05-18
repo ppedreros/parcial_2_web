@@ -1,0 +1,458 @@
+{
+	"info": {
+		"_postman_id": "8db7d4ad-464a-4e71-8c07-06cee7588223",
+		"name": "Reseñas",
+		"description": "Prueba crear reviews. Para esto primero crea un estudiante y una actividad a la que lo inscribe. Luego prueba el caso negativo en el que la actividad no está finalizada, donde debería arrojar error por integridad de los datos. Luego se prueba el caso positivo, actualizando el estado de la actividad y creando la reseña completamente. En los ejemplos de las requests se pueden ver todos los posibles errores al crear una review.\n\nLa base de datos debe estar vacía para correr la prueba, por lo que se debe reiniciar la API.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36519843"
+	},
+	"item": [
+		{
+			"name": "Add a student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()\r",
+							"pm.globals.set(\"estudianteId\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n   \"cedula\": 1,\r\n   \"nombre\": \"Pablo\",\r\n   \"correo\": \"p.pedreros@uniandes.edu.co\",\r\n   \"programa\": \"Ingenieria de sistemas y computacion\",\r\n   \"semestre\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/estudiantes",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"estudiantes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create activity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var data = pm.response.json()\r",
+							"pm.globals.set(\"actividadId\", data.id);\r",
+							"\r",
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"titulo\": \"Taller de Fotografía Artística Avanzada\",\r\n  \"fecha\": \"2025-06-15\",\r\n  \"cupoMaximo\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/actividades",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"actividades"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Sign student in an activity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"   pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseURL}}/estudiantes/{{estudianteId}}/{{actividadId}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"estudiantes",
+						"{{estudianteId}}",
+						"{{actividadId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a review for an unfinished activity",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 412\", function () {\r",
+							"   pm.response.to.have.status(412);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"comentario\": \"La actividad fue muy enriquecedora. El ponente mostró gran dominio del tema y las dinámicas grupales fueron excelentes. Recomendaría esta actividad a otros estudiantes interesados en el área.\",\r\n  \"calificacion\": 5,\r\n  \"fecha\": \"2025-06-16\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/resenas/actividades/{{actividadId}}/estudiantes/{{estudianteId}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"resenas",
+						"actividades",
+						"{{actividadId}}",
+						"estudiantes",
+						"{{estudianteId}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create a review for an unfinished activity",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"comentario\": \"La actividad fue muy enriquecedora. El ponente mostró gran dominio del tema y las dinámicas grupales fueron excelentes. Recomendaría esta actividad a otros estudiantes interesados en el área.\",\r\n  \"calificacion\": 5,\r\n  \"fecha\": \"2025-06-16\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/resenas/actividades/{{actividadId}}/estudiantes/{{estudianteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"resenas",
+								"actividades",
+								"{{actividadId}}",
+								"estudiantes",
+								"{{estudianteId}}"
+							]
+						}
+					},
+					"status": "Precondition Failed",
+					"code": 412,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 412,\n    \"message\": \"Solo se pueden agregar reseñas a actividades finalizadas\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Change activity status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"   pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{baseURL}}/actividades/{{actividadId}}/estado/2",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"actividades",
+						"{{actividadId}}",
+						"estado",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create a review",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"comentario\": \"La actividad fue muy enriquecedora. El ponente mostró gran dominio del tema y las dinámicas grupales fueron excelentes. Recomendaría esta actividad a otros estudiantes interesados en el área.\",\r\n  \"calificacion\": 5,\r\n  \"fecha\": \"2025-06-16\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseURL}}/resenas/actividades/{{actividadId}}/estudiantes/{{estudianteId}}",
+					"host": [
+						"{{baseURL}}"
+					],
+					"path": [
+						"resenas",
+						"actividades",
+						"{{actividadId}}",
+						"estudiantes",
+						"{{estudianteId}}"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "Create a review",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"comentario\": \"La actividad fue muy enriquecedora. El ponente mostró gran dominio del tema y las dinámicas grupales fueron excelentes. Recomendaría esta actividad a otros estudiantes interesados en el área.\",\r\n  \"calificacion\": 5,\r\n  \"fecha\": \"2025-06-16\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/resenas/actividades/{{actividadId}}/estudiantes/{{estudianteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"resenas",
+								"actividades",
+								"{{actividadId}}",
+								"estudiantes",
+								"{{estudianteId}}"
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"id\": 1,\n    \"comentario\": \"La actividad fue muy enriquecedora. El ponente mostró gran dominio del tema y las dinámicas grupales fueron excelentes. Recomendaría esta actividad a otros estudiantes interesados en el área.\",\n    \"calificacion\": 5,\n    \"fecha\": \"2025-06-16\",\n    \"estudiante\": {\n        \"id\": 1,\n        \"cedula\": 1,\n        \"nombre\": \"Pablo\",\n        \"correo\": \"p.pedreros@uniandes.edu.co\",\n        \"programa\": \"Ingenieria de sistemas y computacion\",\n        \"semestre\": 10,\n        \"actividades\": [\n            {\n                \"id\": 1,\n                \"titulo\": \"Taller de Fotografía Artística Avanzada\",\n                \"fecha\": \"2025-06-15\",\n                \"cupoMaximo\": 1,\n                \"estado\": 2\n            }\n        ]\n    },\n    \"actividad\": {\n        \"id\": 1,\n        \"titulo\": \"Taller de Fotografía Artística Avanzada\",\n        \"fecha\": \"2025-06-15\",\n        \"cupoMaximo\": 1,\n        \"estado\": 2,\n        \"inscritos\": [\n            {\n                \"id\": 1,\n                \"cedula\": 1,\n                \"nombre\": \"Pablo\",\n                \"correo\": \"p.pedreros@uniandes.edu.co\",\n                \"programa\": \"Ingenieria de sistemas y computacion\",\n                \"semestre\": 10\n            }\n        ]\n    }\n}"
+				},
+				{
+					"name": "Create a review from a student that was not in the activity",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"comentario\": \"La actividad fue muy enriquecedora. El ponente mostró gran dominio del tema y las dinámicas grupales fueron excelentes. Recomendaría esta actividad a otros estudiantes interesados en el área.\",\r\n  \"calificacion\": 5,\r\n  \"fecha\": \"2025-06-16\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/resenas/actividades/{{actividadId}}/estudiantes/{{estudianteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"resenas",
+								"actividades",
+								"{{actividadId}}",
+								"estudiantes",
+								"{{estudianteId}}"
+							]
+						}
+					},
+					"status": "Precondition Failed",
+					"code": 412,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 412,\n    \"message\": \"El estudiante no estuvo inscrito, no puede agregar reseñas\"\n}"
+				},
+				{
+					"name": "Create a review from a non existent student",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"comentario\": \"La actividad fue muy enriquecedora. El ponente mostró gran dominio del tema y las dinámicas grupales fueron excelentes. Recomendaría esta actividad a otros estudiantes interesados en el área.\",\r\n  \"calificacion\": 5,\r\n  \"fecha\": \"2025-06-16\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/resenas/actividades/{{actividadId}}/estudiantes/0",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"resenas",
+								"actividades",
+								"{{actividadId}}",
+								"estudiantes",
+								"0"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 404,\n    \"message\": \"El estudiante con el ID proporcionado no fue encontrado\"\n}"
+				},
+				{
+					"name": "Create a review for a non existent activity",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"comentario\": \"La actividad fue muy enriquecedora. El ponente mostró gran dominio del tema y las dinámicas grupales fueron excelentes. Recomendaría esta actividad a otros estudiantes interesados en el área.\",\r\n  \"calificacion\": 5,\r\n  \"fecha\": \"2025-06-16\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/resenas/actividades/0/estudiantes/{{estudianteId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"resenas",
+								"actividades",
+								"0",
+								"estudiantes",
+								"{{estudianteId}}"
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\r\n    \"statusCode\": 404,\r\n    \"message\": \"La actividad con el ID proporcionado no fue encontrada\"\r\n}"
+				}
+			]
+		}
+	]
+}
